@@ -30,6 +30,11 @@ sysinfo.txt
 /*.tmp
 /*.svd
 
+# ======================= #
+# Project Rider generated #
+# ======================= #
+.idea
+
 # ============ #
 # OS generated #
 # ============ #
