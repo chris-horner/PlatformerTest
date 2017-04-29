@@ -1,22 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(Controller2D))]
 public class Player : MonoBehaviour {
+  private const float ACCELERATION_TIME_AIRBORNE = 0.1f;
+  private const float ACCELERATION_TIME_GROUNDED = 0.02f;
+  private const float MOVE_SPEED = 6;
+
   public float jumpHeight = 4;
   public float timeToJumpApex = 0.4f;
 
-  float accelerationTimeAirborne = 0.1f;
-  float accelerationTimeGrounded = 0.02f;
-  float moveSpeed = 6;
-  float gravity;
-  float jumpVelocity;
-  float velocityXSmoothing;
-  Vector3 velocity;
-  Controller2D controller;
+  private float gravity;
+  private float jumpVelocity;
+  private float velocityXSmoothing;
+  private Vector3 velocity;
+  private Controller2D controller;
 
-  void Start() {
+  private void Start() {
     controller = GetComponent<Controller2D>();
 
     gravity = -(2 * jumpHeight) / Mathf.Pow(timeToJumpApex, 2);
@@ -24,7 +23,7 @@ public class Player : MonoBehaviour {
     print("Gavity: " + gravity + " Jump Velocity: " + jumpVelocity);
   }
 
-  void Update() {
+  private void Update() {
     if (controller.collisions.above || controller.collisions.below) {
       velocity.y = 0;
     }
@@ -35,8 +34,8 @@ public class Player : MonoBehaviour {
       velocity.y = jumpVelocity;
     }
 
-    float targetVelocityX = input.x * moveSpeed;
-    float smoothTime = controller.collisions.below ? accelerationTimeGrounded : accelerationTimeAirborne;
+    float targetVelocityX = input.x * MOVE_SPEED;
+    float smoothTime = controller.collisions.below ? ACCELERATION_TIME_GROUNDED : ACCELERATION_TIME_AIRBORNE;
     velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, smoothTime);
     velocity.y += gravity * Time.deltaTime;
     controller.Move(velocity * Time.deltaTime);
